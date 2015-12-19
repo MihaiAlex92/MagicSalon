@@ -54,9 +54,9 @@ table.table tr td.name {
 					</ng:switch>
 						
 					
-					<form class="well form-inline" ng:submit="connect()" style= "min-width:120px;">
+					<form class="well form-inline" ng:show= "presenceClient.status == STATUS_DISCONNECTED" ng:submit="connect()" style= "min-width:120px;">
 					
-					<div ng:show= "presenceClient.status == STATUS_DISCONNECTED">
+					<!-- <div ng:show= "presenceClient.status == STATUS_DISCONNECTED"> -->
 						<label><b>Username:</b></label>
 						<input class="input-small" type="text" name="name"
 							placeholder="Client Name"
@@ -70,10 +70,15 @@ table.table tr td.name {
 					
 							 <input	type="submit" class="btn btn-primary" value="Connect"
 							ng:show="presenceClient.status == STATUS_DISCONNECTED" />
-					</div>
-							 <a	class="btn btn-danger" ng:click="disconnect()"
+					<!-- </div> -->
+							<!--  <a	class="btn btn-danger" ng:click="disconnect()"
+							ng:show="presenceClient.status == STATUS_CONNECTED">Disconnect</a> -->
+					</form>		
+					
+					<form>
+					<a	class="btn btn-danger" ng:click="disconnect()"
 							ng:show="presenceClient.status == STATUS_CONNECTED">Disconnect</a>
-					</form>				
+					</form>		
 					
 					<!-- FORMULARUL CARE SE COMPLETEAZA PENTRU A SE TRIMITE DATELE DESPRE UN CLIENT CATRE UN ALT OPERATOR ONLINE -->
 					<div id="formular">
