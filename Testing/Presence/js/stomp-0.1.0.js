@@ -1,3 +1,6 @@
+/*
+
+*/
 (function() {
   var Client, Stomp;
   var __hasProp = Object.prototype.hasOwnProperty, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };

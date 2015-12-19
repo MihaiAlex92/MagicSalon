@@ -10,8 +10,8 @@ function MainController($updateView) {
 
   this.getPeers = function() {
     return Object.keys(this.peers).map(function(name) {
-      return this.peers[name]
-    }.bind(this))
+      return this.peers[name];
+    }.bind(this));
   }.bind(this);
 
   
@@ -20,12 +20,12 @@ function MainController($updateView) {
   this.scrollToBottom = function() {
     var objDiv = document.getElementById("chat_window");
     objDiv.scrollTop = objDiv.scrollHeight;
-  }
+  };
 
   this.presenceClient = new Client({
-      subscribe: "tcp://localhost:10001"
-    , request:   "tcp://localhost:10002"
-    , push:      "tcp://localhost:10003"
+      subscribe: "tcp://localhost:10001",
+      request:   "tcp://localhost:10002",
+      push:      "tcp://localhost:10003"
   });
   this.presenceClient.onResponse = function(payload) {
     Object.merge(this.peers, JSON.parse(payload));
@@ -54,6 +54,8 @@ function MainController($updateView) {
   }.bind(this);
 
   this.messages = [];
+  this.clientAlerts = [];
+  
   this.chatClient = new Client({
       subscribe: "tcp://localhost:10004"  // abonare
     , request:   "tcp://localhost:10005"   //connect online/offline
@@ -64,7 +66,7 @@ function MainController($updateView) {
       this.messages.push(msg);
     }.bind(this));
     this.$root.$eval();
-    this.scrollToBottom();
+    // this.scrollToBottom();
   }.bind(this);
   
   //SUBMIT   PUB/SUB
@@ -73,10 +75,11 @@ function MainController($updateView) {
     var msg = JSON.parse(payload);
     if (msg["nrtel"] && msg["readBy"] === this.name){  //numele, nrtel  descriereTask
     	
-    	this.nrtel = msg["nrtel"];
-    	this.numele = msg["numele"];
-    	this.descriereTask = msg["descriereTask"];
+    	this.nrtel = msg.nrtel;
+    	this.numele = msg.numele;
+    	this.descriereTask = msg.descriereTask;
     	
+    	this.clientAlerts.push(msg);
     	
     	alert(msg["numele"]+"\n" +msg["nrtel"]+"\n"+msg["descriereTask"]);
     }
@@ -85,44 +88,43 @@ function MainController($updateView) {
 
     }
     this.$root.$eval();
-    this.scrollToBottom();
+    // this.scrollToBottom();
 
   }.bind(this);
   this.chatClient.onDisconnect = function() {
-    this.messages = []
+    this.messages = [];
   }.bind(this);
 
   this.sendMessage = function() {
     if (this.message) {
       this.chatClient.push(JSON.stringify({
-          name: this.name
-        , text: this.message
-        , text2: this.message2
+          name: this.name ,
+         text: this.message , 
+         text2: this.message2
       }));
       this.message = '';
       
      
       
     }
-  }.bind(this)
+  }.bind(this);
   
   
   //functie de transmitere date catre un alt operator, ales dintr-o lista de selectie
   this.sendAlert = function() {
     if (this.numele) {
       this.chatClient.push(JSON.stringify({
-          name: this.name
-        , readBy: this.readBy
-        //, message2: this.message2
-        ,numele: this.numele
-        ,nrtel: this.nrtel
-        ,descriereTask: this.descriereTask
+          name: this.name,
+          readBy: this.readBy , 
+          numele: this.numele ,
+          nrtel: this.nrtel ,
+          descriereTask: this.descriereTask
       }));
       this.message2 = '';
 
       
     }
-  }.bind(this)
+  }.bind(this);
 
   this.connect = function() {
     this.presenceClient.connect();
