@@ -92,7 +92,7 @@ table.table tr td.name {
 								<img src="" id="pozac" style="width: 200px; height: 200px;" />
 								<!-- Text input-->
 								<div class="form-group">
-									<label class="col-md-4 control-label" for="numele">Nume</label>
+									<label class="col-md-4 control-label" for="numele"><b>Nume Client</b></label>
 									<div class="col-md-4">
 										<input id="numele" name="numele" type="text"
 											placeholder="Numele si prenumele clientului"
@@ -103,7 +103,7 @@ table.table tr td.name {
 
 								<!-- NR TELEFON-->
 								<div class="form-group">
-									<label class="col-md-4 control-label" for="nrtel">Telefon</label>
+									<label class="col-md-4 control-label" for="nrtel"><b>Telefon</b></label>
 									<div class="col-md-4">
 										<input id="nrtel" name="nrtel" type="text"
 											placeholder="Numarul Clientului"
@@ -114,8 +114,8 @@ table.table tr td.name {
 
 								<!-- DESCRIEREA COMENZII -->
 								<div class="form-group">
-									<label class="col-md-4 control-label" for="descriereTask">Descrierea
-										comenzii</label>
+									<label class="col-md-4 control-label" for="descriereTask"><b>Descrierea
+										comenzii</b></label>
 									<div class="col-md-4">
 										<textarea class="form-control" id="descriereTask"
 											name="descriereTask"
@@ -124,7 +124,7 @@ table.table tr td.name {
 								</div>
 								<!-- SELECTARE OPERATOR (DIN CEI ONLINE LA MOMENTUL RESPECTIV) -->
 								<div class="form-group">
-									<label class="col-md-4 control-label">Select Operator:</label><br/>
+									<label class="col-md-4 control-label"><b>Selectare Operator:</b></label><br/>
 									<select class="col-md-4" name="readBy" required>
 										<option ng:show="getPeers().length > 0"
 											ng:repeat=" peer in getPeers() | isOnline2"
