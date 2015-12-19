@@ -5,6 +5,7 @@
 <title>Presence</title>
 <link href="css/bootstrap-2.0.1.css" rel="stylesheet">
 <link href="css/bootstrap-responsive-2.0.1.css" rel="stylesheet">
+<link href="css/mycss.css" rel="stylesheet">
 <style>
 table.table tr td.timestamp {
 	width: 10%;
@@ -75,18 +76,56 @@ table.table tr td.name {
 							ng:show="presenceClient.status == STATUS_CONNECTED">Disconnect</a> -->
 					</form>		
 					
-					<form>
-					<a	class="btn btn-danger" ng:click="disconnect()"
+					<div ng:show="presenceClient.status ==STATUS_CONNECTED">
+						
+							<a	class="btn btn-danger" ng:click="disconnect()"
 							ng:show="presenceClient.status == STATUS_CONNECTED">Disconnect</a>
-					</form>		
+						
 					
-					<!-- FORMULARUL CARE SE COMPLETEAZA PENTRU A SE TRIMITE DATELE DESPRE UN CLIENT CATRE UN ALT OPERATOR ONLINE -->
-					<div id="formular">
+					
+						<input type="radio" name="ocupat" value="DA" class="radion inline">Buzy!  </input>
+						<input type="radio" name="ocupat" value="NU" class="radion inline">Free! Work me! </input>
+						
+					</div>
+						
+						<br><br><br>	
+					<div class="miki1" ng:show="presenceClient.status == STATUS_CONNECTED">
+							<h1 style="font-size:20px;"><b><u>Lista Operatori</u></b></h1>
+						
+					<!-- 			COD PENTRU LISTA OPERATORILOR EXISTENTI IN APLICATIE		 -->
+					
+						<div class="row" ng:hide="getPeers().length > 0 || presenceClient.status == STATUS_DISCONNECTED">
+							<div class="span12">
+								<h3>No peers online</h3>
+							</div>
+						</div>
+					    <div class="row" ng:show="getPeers().length > 0 "
+							ng:repeat="peer in getPeers()">
+							<div class="span12">
+								<h3>
+									<ng:switch on="peer.online">
+										<span class="label label-success" ng:switch-when="true">online</span>
+										<span class="label label-important" ng:switch-when="false">offline</span>
+									</ng:switch>
+									<small>{{peer.name}} </small>
+								</h3>
+							</div>
+						</div>
+					
+					</div>
+					
+					
+					
+				</div>
+				
+				
+				<!-- FORMULARUL CARE SE COMPLETEAZA PENTRU A SE TRIMITE DATELE DESPRE UN CLIENT CATRE UN ALT OPERATOR ONLINE -->
+				<div id="formular" >
 
-						<form class="form-inline" ng:submit="sendAlert()"
+						<form class="form-inline" ng:submit="sendAlert()" 
 							ng:show="presenceClient.status == STATUS_CONNECTED" name="dateClient">
-							<fieldset>
-
+							 <fieldset>
+								<div style="border:solid black 2px; padding:10px;">
 								<!--POZA CLIENT -->
 								<legend></legend>
 								<img src="" id="pozac" style="width: 200px; height: 200px;" />
@@ -131,63 +170,14 @@ table.table tr td.name {
 											value="{{peer.name}}">{{peer.name}}</option>
 									</select>
 								</div>
+								<input type="submit" class="btn" value="Alerteaza" ng:disabled="dateClient.$invalid" />
+							</div>
 							</fieldset>
-							<input type="submit" class="btn" value="Alerteaza" ng:disabled="dateClient.$invalid" />
+							
 						</form>
 
-					</div>
-					
-				</div>
+				</div>							
 				
-<!-- 				FEREASTRA DE CHAT A OPERATORILOR -->
-				<div class="span7">
-				<!--
-					<div id="chat_window" class="row" style="max-height: 200px;">
-						<table class="table table-striped">
-							<tbody>
-								<tr ng:repeat="message in messages">
-									<td class="timestamp">[{{message.timestamp|timestamp}}]</td>
-									<td class="name"><{{message.name}}></td>
-									<td class="body">{{message.text}}</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div id="send_message" class="row">
-						<form class="form-inline" ng:submit="sendMessage()"
-							ng:show="presenceClient.status == STATUS_CONNECTED">
-							<input class="input-xxlarge" type="text" name="message"
-								placeholder="Say something" /> <input type="submit" class="btn"
-								value="Send" />
-						</form>
-					</div>
-					-->
-					<div ng:show="presenceClient.status ==STATUS_CONNECTED">
-					<input type="radio" name="ocupat" value="DA" class="radion inline">Buzy!  </input>
-					<input type="radio" name="ocupat" value="NU" class="radion inline">Free! Work me! </input>
-					<br>
-					</div>
-					<!-- 			COD PENTRU LISTA OPERATORILOR EXISTENTI IN APLICATIE		 -->
-					
-					<div class="row" ng:hide="getPeers().length > 0 || presenceClient.status == STATUS_DISCONNECTED">
-						<div class="span12">
-							<h3>No peers online</h3>
-						</div>
-					</div>
-				    <div class="row" ng:show="getPeers().length > 0 "
-						ng:repeat="peer in getPeers()">
-						<div class="span12">
-							<h3>
-								<ng:switch on="peer.online">
-									<span class="label label-success" ng:switch-when="true">online</span>
-									<span class="label label-important" ng:switch-when="false">offline</span>
-								</ng:switch>
-								<small>{{peer.name}} </small>
-							</h3>
-						</div>
-					</div>
-					
-				</div>
 			</div>
 		</section>
 	</div>

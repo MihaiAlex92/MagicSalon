@@ -78,7 +78,7 @@ function MainController($updateView) {
     	this.descriereTask = msg["descriereTask"];
     	
     	
-    	alert(msg["numele"]+msg["nrtel"]);
+    	alert(msg["numele"]+"\n" +msg["nrtel"]+"\n"+msg["descriereTask"]);
     }
     else{
         this.messages.push(msg);

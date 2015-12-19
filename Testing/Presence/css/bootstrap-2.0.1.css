@@ -154,7 +154,7 @@ a:hover {
   width: 460px;
 }
 .span7 {
-  width: 540px;
+  width: 540px;   
 }
 .span8 {
   width: 620px;
@@ -3188,6 +3188,7 @@ a.thumbnail:hover {
 }
 .label-success {
   background-color: #468847;
+ 
 }
 .label-success:hover {
   background-color: #356635;
