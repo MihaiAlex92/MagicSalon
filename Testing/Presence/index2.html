@@ -31,9 +31,15 @@ table.table tr td.name {
 <body ng:controller="MainController">
 	<div class="container">
 		<header id="head">
+		<div ng:show= "presenceClient.status == STATUS_DISCONNECTED">
 			<h1>Presence</h1>
 			<p class="lead">Use the form below to type your name in and
 				register with presence server</p>
+		</div>
+		<div ng:show= "presenceClient.status == STATUS_CONNECTED">
+			<h1>STATUS:</h1> <p class="lead" style="color:green;">CONNECTED!</p>
+		</div>
+				
 		</header>
 		<hr />
 		<section id="main">
@@ -47,40 +53,43 @@ table.table tr td.name {
 						<h2 ng:switch-default>Client status:
 							{{presenceClient.status}}</h2>
 					</ng:switch>
-					<form class="well form-inline" ng:submit="connect()">
+					
+					
+					<!-- <div class="row" ng:hide="getPeers().length > 0 || presenceClient.status == STATUS_DISCONNECTED">
+						<div class="span12">
+							<h3>No peers online</h3>
+						</div>
+					</div> -->
+					
+					
+					<form class="well form-inline" ng:submit="connect()" style= "min-width:120px;">
+					
+					<div ng:show= "presenceClient.status == STATUS_DISCONNECTED">
 						<input class="input-small" type="text" name="name"
 							placeholder="Client Name"
-							ng:disabled="{{presenceClient.status == STATUS_CONNECTED}}" /> <input
-							class="input-large" type="text" name="text"
-							placeholder="Status Text"
-							ng:disabled="{{presenceClient.status == STATUS_CONNECTED}}" /> <input
-							type="submit" class="btn btn-primary" value="Connect"
-							ng:show="presenceClient.status == STATUS_DISCONNECTED" /> <a
-							class="btn btn-danger" ng:click="disconnect()"
-							ng:show="presenceClient.status == STATUS_CONNECTED">Disconnect</a>
-					</form>
-
-					<div class="row" ng:show="getPeers().length > 0"
-						ng:repeat="peer in getPeers()">
-						<div class="span12">
-							<h3>
-								<ng:switch on="peer.online">
-									<span class="label label-success" ng:switch-when="true">online</span>
-									<span class="label label-important" ng:switch-when="false">offline</span>
-								</ng:switch>
-								{{peer.name}} <small>{{peer.text}}</small>
-							</h3>
-						</div>
+							ng:disabled="{{presenceClient.status == STATUS_CONNECTED}}" />
+							
+							
+							<input class="input-large" type="password" name="text"
+							placeholder="Password"
+							ng:disabled="{{presenceClient.status == STATUS_CONNECTED}}" />
+							
+					
+							 <input	type="submit" class="btn btn-primary" value="Connect"
+							ng:show="presenceClient.status == STATUS_DISCONNECTED" />
 					</div>
-
-
+							 <a	class="btn btn-danger" ng:click="disconnect()"
+							ng:show="presenceClient.status == STATUS_CONNECTED">Disconnect</a>
+					</form>				
+					
+					<!-- FORMULARUL CARE SE COMPLETEAZA PENTRU A SE TRIMITE DATELE DESPRE UN CLIENT CATRE UN ALT OPERATOR ONLINE -->
 					<div id="formular">
 
 						<form class="form-inline" ng:submit="sendAlert()"
-							ng:show="presenceClient.status == STATUS_CONNECTED">
+							ng:show="presenceClient.status == STATUS_CONNECTED" name="dateClient">
 							<fieldset>
 
-								<!-- Form Name -->
+								<!--POZA CLIENT -->
 								<legend></legend>
 								<img src="" id="pozac" style="width: 200px; height: 200px;" />
 								<!-- Text input-->
@@ -94,7 +103,7 @@ table.table tr td.name {
 									</div>
 								</div>
 
-								<!-- Text input-->
+								<!-- NR TELEFON-->
 								<div class="form-group">
 									<label class="col-md-4 control-label" for="nrtel">Telefon</label>
 									<div class="col-md-4">
@@ -105,45 +114,36 @@ table.table tr td.name {
 									</div>
 								</div>
 
-								<!-- Textarea -->
+								<!-- DESCRIEREA COMENZII -->
 								<div class="form-group">
 									<label class="col-md-4 control-label" for="descriereTask">Descrierea
 										comenzii</label>
 									<div class="col-md-4">
 										<textarea class="form-control" id="descriereTask"
-											name="descriereTask" placeholder="scurta descriere a comenzii"></textarea>
+											name="descriereTask"
+											placeholder="scurta descriere a comenzii"></textarea>
 									</div>
 								</div>
-
+								<!-- SELECTARE OPERATOR (DIN CEI ONLINE LA MOMENTUL RESPECTIV) -->
+								<div class="form-group">
+									<label class="col-md-4 control-label">Select Operator:</label><br/>
+									<select class="col-md-4" name="readBy" required>
+										<option ng:show="getPeers().length > 0"
+											ng:repeat=" peer in getPeers() | isOnline2"
+											value="{{peer.name}}">{{peer.name}}</option>
+									</select>
+								</div>
 							</fieldset>
-
-							<div>
-								<label>Select Operator:</label> <select name="readBy">
-									<option ng:show="getPeers().length > 0"
-										ng:repeat=" peer in getPeers() | isOnline2"
-										value="{{peer.name}}">
-										<!-- <option ng:show="getPeers().length > 0" ng:repeat=" peer in getPeers()"
-                		value = "{{peer.name}}"
-                	> --> {{peer.name}}
-									</option>
-								</select>
-							</div>
-
-							<input type="submit" class="btn" value="Alerteaza" />
+							<input type="submit" class="btn" value="Alerteaza" ng:disabled="dateClient.$invalid" />
 						</form>
 
 					</div>
-
-
-
-
-					<div class="row" ng:hide="getPeers().length > 0">
-						<div class="span12">
-							<h3>No peers online</h3>
-						</div>
-					</div>
+					
 				</div>
+				
+<!-- 				FEREASTRA DE CHAT A OPERATORILOR -->
 				<div class="span7">
+				<!--
 					<div id="chat_window" class="row" style="max-height: 200px;">
 						<table class="table table-striped">
 							<tbody>
@@ -163,30 +163,53 @@ table.table tr td.name {
 								value="Send" />
 						</form>
 					</div>
-
-
-<!-- 					CODUL NOSTRUUU---------------------------- -->
-<!-- 					<div id="send_alert" class="row"> -->
-<!-- 						<form class="form-inline" ng:submit="sendAlert()" -->
-<!-- 							ng:show="presenceClient.status == STATUS_CONNECTED"> -->
-<!-- 							<input class="input -xxlarge" type="text" name="message2" -->
-<!-- 								placeholder="testing bind" /> -->
-
-
-
-<!-- 						</form> -->
-<!-- 					</div> -->
+					-->
+					
+					<input type="radio" name="ocupat" value="DA" class="radion inline">Buzy!  </input>
+					<input type="radio" name="ocupat" value="NU" class="radion inline">Free! Work me! </input>
+					<br>
+					
+					<!-- 			COD PENTRU LISTA OPERATORILOR EXISTENTI IN APLICATIE		 -->
+					
+					<div class="row" ng:hide="getPeers().length > 0 || presenceClient.status == STATUS_DISCONNECTED">
+						<div class="span12">
+							<h3>No peers online</h3>
+						</div>
+					</div>
+				    <div class="row" ng:show="getPeers().length > 0 "
+						ng:repeat="peer in getPeers()">
+						<div class="span12">
+							<h3>
+								<ng:switch on="peer.online">
+									<span class="label label-success" ng:switch-when="true">online</span>
+									<span class="label label-important" ng:switch-when="false">offline</span>
+								</ng:switch>
+								<small>{{peer.name}} </small>
+							</h3>
+						</div>
+					</div>
+					
 				</div>
 			</div>
 		</section>
 	</div>
+	
+	
+	
+	
+	
+<!-- 	LISTA DE SCRIPTURI ADAUGATE -->
 	<script type="text/javascript" src="js/angular-0.9.19.js" ng:autobind></script>
-
-
 	<!-- <script type="text/javascript" src="js/angular_1.4.8.min.js" ng:autobind></script> -->
 	<script type="text/javascript" src="js/stomp-0.1.0.js"></script>
 	<script type="text/javascript" src="js/nullmq-0.1.0.js"></script>
 	<script type="text/javascript" src="js/presence-0.1.1.js"></script>
+	
+	
+	
+	
+	
+<!-- 	FILTERE DEFINITE PENTRU OUTPUTUL RETURNAT DE FUNCTII -->
 	<script type="text/javascript">
 		angular.filter('timestamp', function(input) {
 			var timestamp = new Date(input);
@@ -200,7 +223,7 @@ table.table tr td.name {
 
 			var out = [];
 			for (var i = 0; i < input.length; i++) {
-				if (input[i].online == true)
+				if ((input[i].online == true) && (input[i].name != this.name))
 					out.push(input[i]);
 			}
 			return out;
