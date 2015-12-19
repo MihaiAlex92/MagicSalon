@@ -32,9 +32,8 @@ table.table tr td.name {
 	<div class="container">
 		<header id="head">
 		<div ng:show= "presenceClient.status == STATUS_DISCONNECTED">
-			<h1>Presence</h1>
-			<p class="lead">Use the form below to type your name in and
-				register with presence server</p>
+			<h1 style="font-size:25px;">STATUS:</h1>
+			<p class="lead" style="color:red;">DISCONNECTED!</p>
 		</div>
 		<div ng:show= "presenceClient.status == STATUS_CONNECTED">
 			<h1>STATUS:</h1> <p class="lead" style="color:green;">CONNECTED!</p>
@@ -53,24 +52,18 @@ table.table tr td.name {
 						<h2 ng:switch-default>Client status:
 							{{presenceClient.status}}</h2>
 					</ng:switch>
-					
-					
-					<!-- <div class="row" ng:hide="getPeers().length > 0 || presenceClient.status == STATUS_DISCONNECTED">
-						<div class="span12">
-							<h3>No peers online</h3>
-						</div>
-					</div> -->
-					
+						
 					
 					<form class="well form-inline" ng:submit="connect()" style= "min-width:120px;">
 					
 					<div ng:show= "presenceClient.status == STATUS_DISCONNECTED">
+						<label><b>Username:</b></label>
 						<input class="input-small" type="text" name="name"
 							placeholder="Client Name"
 							ng:disabled="{{presenceClient.status == STATUS_CONNECTED}}" />
 							
-							
-							<input class="input-large" type="password" name="text"
+							<label><b>Password:</b></label>
+							<input class="input-small" type="password" name="text"
 							placeholder="Password"
 							ng:disabled="{{presenceClient.status == STATUS_CONNECTED}}" />
 							
@@ -164,11 +157,11 @@ table.table tr td.name {
 						</form>
 					</div>
 					-->
-					
+					<div ng:show="presenceClient.status ==STATUS_CONNECTED">
 					<input type="radio" name="ocupat" value="DA" class="radion inline">Buzy!  </input>
 					<input type="radio" name="ocupat" value="NU" class="radion inline">Free! Work me! </input>
 					<br>
-					
+					</div>
 					<!-- 			COD PENTRU LISTA OPERATORILOR EXISTENTI IN APLICATIE		 -->
 					
 					<div class="row" ng:hide="getPeers().length > 0 || presenceClient.status == STATUS_DISCONNECTED">
