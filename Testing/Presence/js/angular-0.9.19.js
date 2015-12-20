@@ -3,9 +3,7 @@
  * (c) 2010-2011 AngularJS http://angularjs.org
  * License: MIT
  */
- 
 'use strict';
-
 (function(window, document, undefined){
 
 ////////////////////////////////////

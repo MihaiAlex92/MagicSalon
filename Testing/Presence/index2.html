@@ -82,10 +82,10 @@ table.table tr td.name {
 							ng:show="presenceClient.status == STATUS_CONNECTED">Disconnect</a>
 						
 					
-					
+					<form ng:submit:"blockMe()"
 						<input type="radio" name="ocupat" value="DA" class="radion inline">Buzy!  </input>
-						<input type="radio" name="ocupat" value="NU" class="radion inline" checked>Free! Work me! </input>
-						
+						<input type="radio" name="ocupat" value="NU" class="radion inline">Free! Work me! </input>
+					</form>	
 					</div>
 						
 						<br><br><br>	
@@ -128,7 +128,7 @@ table.table tr td.name {
 								<div style="border:solid black 2px; padding:10px;">
 								<!--POZA CLIENT -->
 								<legend></legend>
-								<img src="./img/john_doe.jpg" id="pozac" style="width: 200px; height: 200px;" />
+								<img src="./img/user.jpg" id="pozac" style="width: 200px; height: 200px;" />
 								<!-- Text input-->
 								<div class="form-group">
 									<label class="col-md-4 control-label" for="numele"><b>Nume Client</b></label>
@@ -162,20 +162,35 @@ table.table tr td.name {
 									</div>
 								</div>
 								<!-- SELECTARE OPERATOR (DIN CEI ONLINE LA MOMENTUL RESPECTIV) -->
-								<div class="form-group">
+								<!-- <div class="form-group">
 									<label class="col-md-4 control-label"><b>Selectare Operator:</b></label><br/>
-									<select class="col-md-4" name="readBy" required>
+									<select class="col-md-4" name="cititor" id="cititor">
 										<option ng:show="getPeers().length > 0"
 											ng:repeat=" peer in getPeers() | isOnline2"
 											value="{{peer.name}}">{{peer.name}}</option>
 									</select>
+								</div> -->
+								 <!-- | isOnline2" -->
+								
+								<div>
+								<label>Select Operator:</label> <select name="readBy">
+									<option ng:show="getPeers().length > 0"
+										ng:repeat=" peer in getPeers() | isOnline3"
+										value="{{peer.name}}">
+										{{peer.name}}
+									</option>
+								</select>
+							</div>
 								</div>
+								
 								<input type="submit" class="btn" value="Alerteaza" ng:disabled="dateClient.$invalid" />
 							</div>
 							</fieldset>
 							
 						</form>
 
+						<input type="text" name="miki" >
+								
 				</div>							
 				
 			</div>
@@ -217,6 +232,18 @@ table.table tr td.name {
 			return out;
 
 		});
+		
+		angular.filter('isOnline3', function(input) {
+
+			var out = [];
+			for (var i = 0; i < input.length; i++) {
+				if (input[i].online == true)
+					out.push(input[i]);
+			}
+			return out;
+
+		});
+		
 	</script>
 </body>
 </html>

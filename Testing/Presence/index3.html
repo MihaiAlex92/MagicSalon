@@ -1,134 +1,88 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>Presence</title>
-<link href="css/bootstrap-2.0.1.css" rel="stylesheet">
-<link href="css/bootstrap-responsive-2.0.1.css" rel="stylesheet">
-<link href="css/mycss.css" rel="stylesheet">
-<style>
-table.table tr td.timestamp {
-	width: 10%;
-}
-
-table.table tr td.name {
-	width: 20%;
-}
-
-table.table tr td.text {
-	width: 80%;
-}
-
-table.table tr td.name {
-	font-weight: bold;
-}
-
-#chat_window {
-	overflow: auto;
-	max-height: 400px;
-}
-</style>
-</head>
-<body ng:controller="MainController">
-	<div class="container">
-		<header id="head">
-		<div ng:show= "presenceClient.status == STATUS_DISCONNECTED">
+  <head>
+    <meta charset="utf-8">
+    <title>Presence</title>
+    <link href="css/bootstrap-2.0.1.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive-2.0.1.css" rel="stylesheet">
+    <style>
+    table.table tr td.timestamp {
+      width: 10%;
+    }
+    table.table tr td.name {
+      width: 20%;
+    }
+    table.table tr td.text {
+      width: 80%;
+    }
+    table.table tr td.name {
+      font-weight: bold;
+    }
+    #chat_window {
+      overflow: auto;
+      max-height: 400px;
+    }
+    </style>
+  </head>
+  <body ng:controller="MainController">
+    <div class="container">
+      <header id="head">
+        <div ng:show= "presenceClient.status == STATUS_DISCONNECTED">
 			<h1 style="font-size:25px;">STATUS:</h1>
 			<p class="lead" style="color:red;">DISCONNECTED!</p>
 		</div>
 		<div ng:show= "presenceClient.status == STATUS_CONNECTED">
 			<h1>STATUS:</h1> <p class="lead" style="color:green;">CONNECTED!</p>
 		</div>
-				
-		</header>
-		<hr />
-		<section id="main">
-			<div class="row">
-				<div class="span5">
-					<ng:switch on="presenceClient.status">
-						<h2 ng:switch-when="2">Connecting...</h2>
-						<h2 ng:switch-when="0">You are connected as {{name}}</h2>
-						<h2 ng:switch-when="3">Disconnecting...</h2>
-						<h2 ng:switch-when="1">You are not connected</h2>
-						<h2 ng:switch-default>Client status:
-							{{presenceClient.status}}</h2>
-					</ng:switch>
-						
-					
-					<form class="well form-inline" ng:show= "presenceClient.status == STATUS_DISCONNECTED" ng:submit="connect()" style= "min-width:120px;">
-					
-					<!-- <div ng:show= "presenceClient.status == STATUS_DISCONNECTED"> -->
-						<label><b>Username:</b></label>
-						<input class="input-small" type="text" name="name"
-							placeholder="Client Name"
-							ng:disabled="{{presenceClient.status == STATUS_CONNECTED}}" />
-							
-							<label><b>Password:</b></label>
-							<input class="input-small" type="password" name="text"
-							placeholder="Password"
-							ng:disabled="{{presenceClient.status == STATUS_CONNECTED}}" />
-							
-					
-							 <input	type="submit" class="btn btn-primary" value="Connect"
-							ng:show="presenceClient.status == STATUS_DISCONNECTED" />
-					<!-- </div> -->
-							<!--  <a	class="btn btn-danger" ng:click="disconnect()"
-							ng:show="presenceClient.status == STATUS_CONNECTED">Disconnect</a> -->
-					</form>		
-					
-					<div ng:show="presenceClient.status ==STATUS_CONNECTED">
-						
-							<a	class="btn btn-danger" ng:click="disconnect()"
-							ng:show="presenceClient.status == STATUS_CONNECTED">Disconnect</a>
-						
-					
-					
-						<input type="radio" name="ocupat" value="DA" class="radion inline">Buzy!  </input>
-						<input type="radio" name="ocupat" value="NU" class="radion inline">Free! Work me! </input>
-						
-					</div>
-						
-						<br><br><br>	
-					<div class="miki1" ng:show="presenceClient.status == STATUS_CONNECTED">
-							<h1 style="font-size:20px;"><b><u>Lista Operatori</u></b></h1>
-						
-					<!-- 			COD PENTRU LISTA OPERATORILOR EXISTENTI IN APLICATIE		 -->
-					
-						<div class="row" ng:hide="getPeers().length > 0 || presenceClient.status == STATUS_DISCONNECTED">
-							<div class="span12">
-								<h3>No peers online</h3>
-							</div>
-						</div>
-					    <div class="row" ng:show="getPeers().length > 0 "
-							ng:repeat="peer in getPeers()">
-							<div class="span12">
-								<h3>
-									<ng:switch on="peer.online">
-										<span class="label label-success" ng:switch-when="true">online</span>
-										<span class="label label-important" ng:switch-when="false">offline</span>
-									</ng:switch>
-									<small>{{peer.name}} </small>
-								</h3>
-							</div>
-						</div>
-					
-					</div>
-					
-					
-					
-				</div>
-				
-				
-				<!-- FORMULARUL CARE SE COMPLETEAZA PENTRU A SE TRIMITE DATELE DESPRE UN CLIENT CATRE UN ALT OPERATOR ONLINE -->
+		  </header>
+      <hr />
+      <section id="main">
+        <div class="row">
+          <div class="span5">
+            <ng:switch on="presenceClient.status">
+            <h2 ng:switch-when="2">Connecting...</h2>
+            <h2 ng:switch-when="0">You are connected as {{name}}</h2>
+            <h2 ng:switch-when="3">Disconnecting...</h2>
+            <h2 ng:switch-when="1">You are not connected</h2>
+            <h2 ng:switch-default>Client status: {{presenceClient.status}}</h2>
+            </ng:switch>
+            <form class="well form-inline" ng:submit="connect()">
+              <input class="input-small" type="text" name="name" placeholder="Client Name" ng:disabled="{{presenceClient.status == STATUS_CONNECTED}}" />
+              <input class="input-large" type="text" name="text" placeholder="Status Text" ng:disabled="{{presenceClient.status == STATUS_CONNECTED}}" />
+              <input type="submit" class="btn btn-primary" value="Connect" ng:show="presenceClient.status == STATUS_DISCONNECTED" />
+              <a class="btn btn-danger" ng:click="disconnect()" ng:show="presenceClient.status == STATUS_CONNECTED">Disconnect</a>
+            </form>
+            <div class="row" ng:show="getPeers().length > 0" ng:repeat="peer in getPeers()">
+              <div class="span12">
+                <h3>
+                  <ng:switch on="peer.online" >
+                    <span class="label label-success" ng:switch-when="true">online</span>
+                    <span class="label label-important" ng:switch-when="false">offline</span>
+                  </ng:switch>
+                  {{peer.name}}
+                  <small>{{peer.text}}</small>
+                </h3>
+              </div>
+            </div>
+            <div class="row" ng:hide="getPeers().length > 0">
+              <div class="span12">
+                <h3>No peers online</h3>
+              </div>
+            </div>
+          </div>
+          
+          
+          
+          <!-- FORMULARUL CARE SE COMPLETEAZA PENTRU A SE TRIMITE DATELE DESPRE UN CLIENT CATRE UN ALT OPERATOR ONLINE -->
 				<div id="formular" >
 
 						<form class="form-inline" ng:submit="sendAlert()" 
-							ng:show="presenceClient.status == STATUS_CONNECTED" name="dateClient">
+							ng:show="presenceClient.status == STATUS_CONNECTED">
 							 <fieldset>
 								<div style="border:solid black 2px; padding:10px;">
 								<!--POZA CLIENT -->
 								<legend></legend>
-								<img src="/images/user.jpg" id="pozac" style="width: 200px; height: 200px;" />
+								<img src="./img/user.jpg" id="pozac" style="width: 200px; height: 200px;" />
 								<!-- Text input-->
 								<div class="form-group">
 									<label class="col-md-4 control-label" for="numele"><b>Nume Client</b></label>
@@ -176,38 +130,27 @@ table.table tr td.name {
 							
 						</form>
 
-				</div>							
-				
-			</div>
-		</section>
-	</div>
-	
-	
-	
-	
-	
-<!-- 	LISTA DE SCRIPTURI ADAUGATE -->
-	<script type="text/javascript" src="js/angular-0.9.19.js" ng:autobind></script>
-	<!-- <script type="text/javascript" src="js/angular_1.4.8.min.js" ng:autobind></script> -->
-	<script type="text/javascript" src="js/stomp-0.1.0.js"></script>
-	<script type="text/javascript" src="js/nullmq-0.1.0.js"></script>
-	<script type="text/javascript" src="js/presence-0.1.1.js"></script>
-	
-	
-	
-	
-	
-<!-- 	FILTERE DEFINITE PENTRU OUTPUTUL RETURNAT DE FUNCTII -->
-	<script type="text/javascript">
-		angular.filter('timestamp', function(input) {
-			var timestamp = new Date(input);
-			return timestamp.getHours() + ':' + timestamp.getMinutes() + ':'
-					+ timestamp.getSeconds();
-		});
+							
 
-		/*   angular */
-
-		angular.filter('isOnline2', function(input) {
+				</div>	
+          
+          
+          
+          
+        </div>
+      </section>
+    </div>
+    <script type="text/javascript" src="js/angular-0.9.19.js" ng:autobind></script>
+    <script type="text/javascript" src="js/stomp-0.1.0.js"></script>
+    <script type="text/javascript" src="js/nullmq-0.1.0.js"></script>
+    <script type="text/javascript" src="js/presence-0.1.1.js"></script>
+    <script type="text/javascript">
+      angular.filter('timestamp', function(input) {
+        var timestamp = new Date(input);
+        return timestamp.getHours()+':'+timestamp.getMinutes()+':'+timestamp.getSeconds();
+      });
+      
+      angular.filter('isOnline2', function(input) {
 
 			var out = [];
 			for (var i = 0; i < input.length; i++) {
@@ -217,6 +160,6 @@ table.table tr td.name {
 			return out;
 
 		});
-	</script>
-</body>
+    </script>
+  </body>
 </html>

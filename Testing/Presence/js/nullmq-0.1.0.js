@@ -1,6 +1,3 @@
-/*
-
-*/
 (function() {
   var Queue, Socket, Stomp, assert, nullmq,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
