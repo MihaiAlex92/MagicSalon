@@ -85,6 +85,7 @@ function MainController($updateView) {
     }
     else{
         this.messages.push(msg);
+      alert(msg["nrtel"] +msg["readBy"] +msg["ocupat"] + this.name);
 
     }
     this.$root.$eval();
